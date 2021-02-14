@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+#kubernetes deployment yaml google
+kind: Deployment
+# define kubernetes object you want to create
+metadata:
+  # the name of the object you create
+  # kubectl create deployment second-app
+  name: second-app-deployment
+  # name is up to you
+spec:
+  # specification of the deployment
+  # how this deployment should be configured
+  replicas: 1
+  # the number of pod instance do you wanna have as a default
+  # 1 ==== start with 1
+  selector:
+    # deployments are dynamic objects or dynamic things in the Kubernetes World
+    matchLabels:
+      app: second-app
+      tier: backend
+      # so now i can tell this deployment that all the pods which have a label of app
+      # with value of second app , and which have label with a name of tier with value of backend
+      # should be controlled by this deployment
+      # other pods which only have ... , not ... will not be controlled by this deployment
+  template:
+    # as a side note , you don't need to add kind here because the template of the deployment always describe a pod ( kind : pod )
+    # you define the pods that should be created as part of this deployment
+    metadata:
+      # we have to add metadata here because pod is a object in the Kubernetes world ( Deployment is an object , a pod is another object )
+      labels:
+        # you can have one or more labels on a given object in this case on a pod.
+        # and then you can connect that to another object to the deployment with so called selector
+        # so that deployment knows which pods which are out there running in the cluster should be controlled by it
+        app: second-app
+        tier: backend
+    spec:
+      # define how this pod should be configured , spec above is how deployment should be configured
+      # we have to specification of the individual pods which are created for this deployment
+      containers:
+        # if you want to define multiple containers in the same pod , define multiple dashes with multiple list items
+        - name: second-node
+          # the name is up to you
+          image: xslim2511/kub-first-app:2
+        # kubectl create deployment first-app --image=i1,i2,i3 ( multiple images )
